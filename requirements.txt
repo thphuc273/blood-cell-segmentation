@@ -1,8 +1,8 @@
-dill 
+dill==0.3.8 
 from-root
-notebook
-gdown
+notebook==7.2.2
+gdown>=5.0.0
 flask-cors
-flask
+flask==3.0.3
 ultralytics
 -e .
