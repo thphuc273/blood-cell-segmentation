@@ -15,16 +15,13 @@ class ModelTrainer:
     def initiate_model_trainer(self)->ModelTrainerArtifact:
         logging.info("Enter initiate model trainer in Model Trainer")
         try:
+            current_dir = os.getcwd()
             logging.info("Unzipping data")
             os.system("unzip data.zip")
             os.system("rm data.zip")
-            os.system(f"yolo task=segment 
-                      mode=train 
-                      model={self.model_trainer_config.weight_name}
-                      data=data.yamls
-                      epochs = {self.model_trainer_config.epochs}
-                      imgsz = 640 
-                      save = true") 
+            data_yaml_path = os.path.join(current_dir, "data/data.yaml")
+            
+            os.system(f"yolo task=segment mode=train model={self.model_trainer_config.weight_name} data={data_yaml_path} epochs = {self.model_trainer_config.epochs} imgsz = 640 save = true") 
             os.makedirs(self.model_trainer_config.model_trainer_dir, exist_ok=True)
             os.system(f"cp runs/segment/train/weights/best.pt {self.model_trainer_config.model_trainer_dir}")
             os.system("rm -rf yolov9c-seg.pt")

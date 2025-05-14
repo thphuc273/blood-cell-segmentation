@@ -7,7 +7,7 @@ Data Ingestion related constant start with DATA_INGESTION VAR NAME
 
 DATA_INGESTION_DIR_NAME: str = "data_ingestion"
 DATA_INGESTION_FEATURE_STORE_DIR: str = "feature_store"
-DATA_DOWNLOAD_URL = "https://drive.google.com/file/d/1wTEKZrV5z8MO4RUKfZgwUaVVK1YPkBth/view?usp=sharing"
+DATA_DOWNLOAD_URL = "https://drive.google.com/file/d/1kePIQb98zwWuzkxwMJMF1ZSzmiwvM2aF/view?usp=sharing"
 
 
 """

@@ -48,9 +48,23 @@ class DataIngestion:
         try:
             feature_store_path = self.data_ingestion_config.feature_store_file_path
             os.makedirs(feature_store_path, exist_ok=True)
+        
             with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
-                zip_ref.extractall(feature_store_path)
-            logging.info(f"Extracting zip file: {zip_file_path} into {feature_store_path}")
+                for file in zip_ref.infolist():
+                    if not file.is_dir():
+                        if file.filename.startswith('data/'):
+                            relative_path = file.filename[5:]  
+                        else:
+                            relative_path = file.filename
+
+                        target_path = os.path.join(feature_store_path, relative_path)
+                    
+                        os.makedirs(os.path.dirname(target_path), exist_ok=True)
+                    
+                        with zip_ref.open(file) as source, open(target_path, 'wb') as dest:
+                            dest.write(source.read())
+                
+            logging.info(f"Unzip file zip: {zip_file_path} into {feature_store_path}")
             return feature_store_path
         
         except Exception as e:
