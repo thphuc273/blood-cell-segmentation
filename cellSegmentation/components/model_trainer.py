@@ -17,7 +17,7 @@ class ModelTrainer:
         try:
             current_dir = os.getcwd()
             logging.info("Unzipping data")
-            os.system("unzip data.zip")
+            os.system("unzip -o data.zip")
             os.system("rm data.zip")
             data_yaml_path = os.path.join(current_dir, "data/data.yaml")
             
