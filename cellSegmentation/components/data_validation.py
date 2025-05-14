@@ -27,7 +27,7 @@ class DataValidation:
             validation_status = None
             
             all_files = os.listdir(self.data_ingestion_artifact.feature_store_path)
-            print(all_files)
+            all_files = [f for f in all_files if f not in ['data.yaml', '.gitkeep']]
             for file in all_files:
                 if file not in self.data_validation_config.required_file_list:
                     validation_status = False
