@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Web App</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+  <style>
+    .upload-image {
+      height: 400px;
+      overflow: auto;
+    }
+
+    .resp-img {
+      height: 400px;
+      width: auto;
+    }
+
+    #loading {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 9999;
+      background: rgba(255, 255, 255, 0.7);
+      display: none;
+    }
+
+    .loader {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #363e75;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 2s linear infinite;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-top: -30px;
+      margin-left: -30px;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="bg-primary text-center py-5 mb-4">
+    <div class="container">
+      <h1 class="font-weight-light text-white">Cell Segmentation using YOLOv8</h1>
+    </div>
+  </header>
+
+  <div class="container">
+    <form class="input-group upload-data row mb-4">
+      <div class="col-md-6">
+        <button type="button" class="btn btn-primary col-12" id="uload">Upload</button>
+      </div>
+      <div class="col-md-6">
+        <button id="send" type="button" class="btn btn-success col-12">Predict</button>
+      </div>
+      <input type="hidden" class="form-control" id="url" value="/predict" />
+      <input type="file" id="fileinput" style="display: none;" />
+    </form>
+
+    <div class="row">
+      <div class="col-md-6 mb-4">
+        <div class="card border-0 shadow upload-image text-center">
+          <video autoplay id="video"
+            poster="https://img.freepik.com/free-vector/group-young-people-posing-photo_52683-18824.jpg?size=338&ext=jpg"
+            style="width: 100%; max-height: 400px;"></video>
+          <img src="" id="photo" style="display: none; max-width: 100%; height: auto;" />
+          <canvas id="canvas" style="display: none;"></canvas>
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-4">
+        <div class="card border-0 shadow res-part2">
+          <div class="card-body text-center">
+            <div id="result-image-container"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="loading">
+    <div class="loader"></div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script>
+    let base_data = "";
+
+    function sendRequest() {
+      if (!base_data) return alert("Please upload an image first.");
+      $("#loading").show();
+      $.ajax({
+        url: $("#url").val(),
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({ image: base_data }),
+        success: function (res) {
+          $("#loading").hide();
+          if (res.image) {
+            $("#result-image-container").html(
+              `<img class="resp-img" src="data:image/jpeg;base64,${res.image}" />`
+            );
+          } else {
+            $("#result-image-container").html("<p class='text-danger'>No image returned</p>");
+          }
+        },
+        error: function () {
+          $("#loading").hide();
+          $("#result-image-container").html("<p class='text-danger'>Request failed</p>");
+        }
+      });
+    }
+
+    $(document).ready(function () {
+      $('#send').click(function () {
+        sendRequest();
+      });
+
+      $('#uload').click(function () {
+        $('#fileinput').trigger('click');
+      });
+
+      $("#fileinput").change(function () {
+        if (this.files && this.files[0]) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            const img = new Image();
+            img.onload = function () {
+              const canvas = document.createElement('canvas');
+              canvas.width = img.width;
+              canvas.height = img.height;
+              const ctx = canvas.getContext('2d');
+              ctx.drawImage(img, 0, 0);
+              base_data = canvas.toDataURL('image/jpeg', 1.0).replace(/^data:image.+;base64,/, '');
+            };
+            img.src = e.target.result;
+            $("#photo").attr("src", e.target.result).show();
+            $("#video").hide();
+          };
+          reader.readAsDataURL(this.files[0]);
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

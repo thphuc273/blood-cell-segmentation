@@ -67,10 +67,10 @@ class TrainPipeline:
             data_ingestion_artifact = self.start_data_ingestion()
             data_validation_artifact = self.start_data_validation(data_ingestion_artifact=data_ingestion_artifact)
             model_trainer_artifact = self.start_model_trainer()
-            # if data_validation_artifact.validation_status == True:
-            #     model_trainer_artifact = self.start_model_trainer()
-            # else:
-            #     raise Exception("Your data is not in correct format")
+            if data_validation_artifact.validation_status == True:
+                model_trainer_artifact = self.start_model_trainer()
+            else:
+                raise Exception("Your data is not in correct format")
         except Exception as e:
             raise AppException(e, sys)
         

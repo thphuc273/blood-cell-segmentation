@@ -30,7 +30,7 @@ class DataValidation:
             all_files = [f for f in all_files if f not in ['data.yaml', '.gitkeep']]
             for file in all_files:
                 if file not in self.data_validation_config.required_file_list:
-                    validation_status = True
+                    validation_status = False
                     os.makedirs(self.data_validation_config.data_validation_dir, exist_ok=True)
                     with open(self.data_validation_config.valid_status_file_dir, 'w') as f:
                         f.write(f"Validation status: {validation_status}")
