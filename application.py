@@ -12,7 +12,9 @@ from cellSegmentation.logger import logging
 from flask import Flask, request, jsonify, render_template, Response
 from flask_cors import CORS, cross_origin
  
-app = Flask(__name__)
+
+application = Flask(__name__)
+app = application
 CORS(app)
 
 class ClientApp:
@@ -73,6 +75,6 @@ def predictRoute():
         print("Exception:", e)
         return jsonify({"error": "Internal server error"}), 500
 
-if __name__== "__main__":
-    clientApp = ClientApp()
-    app.run(host=APP_HOST, port=APP_PORT)
+# if __name__== "__main__":
+#     clientApp = ClientApp()
+#     app.run(host=APP_HOST, port=APP_PORT)
