@@ -1,8 +1,7 @@
-dill==0.3.8 
-from-root
-notebook==7.2.2
-gdown>=5.0.0
-flask-cors
 flask==3.0.3
+flask-cors
+gunicorn
 ultralytics
--e .
+numpy
+Pillow
+dill==0.3.8
