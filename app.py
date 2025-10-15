@@ -20,8 +20,6 @@ CORS(app)
 class ClientApp:
     def __init__(self):
         self.filename = os.path.join("data", "inputImage.jpg") 
-
-clientApp = ClientApp()
         
 @app.route("/")    
 def home():
@@ -76,3 +74,7 @@ def predictRoute():
     except Exception as e:
         print("Exception:", e)
         return jsonify({"error": "Internal server error"}), 500
+
+if __name__== "__main__":
+    clientApp = ClientApp()
+    app.run(host=APP_HOST, port=APP_PORT)
