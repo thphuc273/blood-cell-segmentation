@@ -21,6 +21,8 @@ class ClientApp:
     def __init__(self):
         self.filename = os.path.join("data", "inputImage.jpg") 
         
+clientApp = ClientApp()
+        
 @app.route("/")    
 def home():
     return render_template("index.html")
